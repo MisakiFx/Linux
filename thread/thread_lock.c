@@ -1,3 +1,7 @@
+/**
+ * 抢票情景，考虑线程安全的情况
+ * 练习互斥锁的使用
+ **/ 
 /*互斥锁的练习*/
 #include <stdio.h>
 #include <pthread.h>
