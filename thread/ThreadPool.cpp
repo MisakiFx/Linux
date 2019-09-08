@@ -129,7 +129,6 @@ class ThreadPool
       pthread_mutex_unlock(&_mutex);
       while(_thr_cur > 0)
       {
-        //std::cout << "cont:" << _thr_cur << std::endl;
         pthread_cond_broadcast(&_cond_con);
         usleep(1000);
       }
