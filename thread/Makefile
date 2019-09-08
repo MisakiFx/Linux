@@ -1,3 +1,5 @@
+threadpool:ThreadPool.cpp
+	g++ -std=c++11 -g $^ -o $@ -pthread
 ringqueue:RingQueue.cpp
 	g++ -std=c++11 -g $^ -o $@ -pthread
 consumer:BlockQueue.cpp
