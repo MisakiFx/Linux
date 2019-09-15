@@ -40,7 +40,27 @@ int main(int argc, char* argv[])
   }
   while(1)
   {
-
+    char buf[1024] = {0};
+    struct sockaddr_in cliaddr;
+    socklen_t len = sizeof(struct sockaddr_in);
+    int ret = recvfrom(sockfd, buf, 1023, 0, (struct sockaddr*)&cliaddr, &len);
+    if(ret < 0)
+    {
+      perror("recvfrom error");
+      close(sockfd);
+      return -1;
+    }
+    printf("client say: %s\n", buf);
+    memset(buf, 0, 1024);
+    scanf("%s", buf);
+    len = sizeof(struct sockaddr_in);
+    ret = sendto(sockfd, buf, strlen(buf), 0, (struct sockaddr*)&cliaddr, len);
+    if(ret < 0)
+    {
+      perror("sendto error");
+      close(sockfd);
+      return -1;
+    }
   }
   close(sockfd);
 }
