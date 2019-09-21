@@ -49,6 +49,7 @@ int main(int argc, char* argv[])
   CHECK_RET(sock.Listen());
   while(1)
   {
+    //为了避免内存泄露，描述符覆盖等问题
     TcpSocket* newsock = new TcpSocket();
     bool ret = sock.Accept(*newsock);
     if(ret == false)
