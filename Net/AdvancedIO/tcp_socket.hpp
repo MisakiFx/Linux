@@ -25,7 +25,7 @@ class TcpSocket
     }
     ~TcpSocket()
     {
-      Close();
+      //Close();
     }
     //创建套接字
     bool Socket()
@@ -140,6 +140,10 @@ class TcpSocket
       {
         close(_sockfd);
       }
+    }
+    int GetFd()
+    {
+      return _sockfd;
     }
   private:
     int _sockfd;
