@@ -14,6 +14,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
+#include <fcntl.h>
 #include <unistd.h>
 #define CHECK_RET(q) if(q == false) {return -1;}
 class TcpSocket
@@ -119,19 +120,34 @@ class TcpSocket
     bool Recv(std::string& buf)
     {
       char tmp[4096] = {0};
-      int ret = recv(_sockfd, &tmp[0], 4096, 0);
-      if(ret < 0)
+      buf.clear();
+      while(1)
       {
-        std::cerr << "recv error" << std::endl;
-        return false;
+        int ret = recv(_sockfd, &tmp[0], 4095, 0);
+        if(ret < 0)
+        {
+          if(errno == EAGAIN)
+          {
+            break;
+          }
+          std::cerr << "recv error" << std::endl;
+          return false;
+        }
+        else if(ret == 0)
+        {
+          std::cerr << "peer shutdown" << std::endl;
+          return false;
+        }
+        tmp[ret] = '\0';
+        buf += tmp;
       }
-      else if(ret == 0)
-      {
-        std::cerr << "peer shutdown" << std::endl;
-        return false;
-      }
-      buf = tmp;
       return true;
+    }
+    //将描述符设置为非阻塞
+    void SetNonBlock()
+    {
+      int flag = fcntl(_sockfd, F_GETFL, 0);
+      fcntl(_sockfd, F_SETFL, O_NONBLOCK | flag);
     }
     //关闭
     bool Close()
