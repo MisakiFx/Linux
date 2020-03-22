@@ -1,3 +1,4 @@
+//creat函数以及close函数
 #include <iostream>
 #include <fcntl.h>
 #include <unistd.h>

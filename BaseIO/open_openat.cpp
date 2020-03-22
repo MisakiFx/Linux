@@ -13,6 +13,7 @@
  * flags:表示选项，用|连接多个选项
  * flags选项宏的定义文件在每个系统中有所不同，Linux中定义在fcntl-linux.h文件中
  * mode参数仅在使用部分选项时才用到，例如O_CREAT在mode中需要给定文件初始权限
+ * Return Value:打开的文件描述符，失败返回-1
  * Rules:
  * 文件描述符分配规则最小未使用
  */
