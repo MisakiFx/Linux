@@ -4,7 +4,9 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
-
+/* 关于低级IO缓冲区大小的选取，在Linux ext4文件系统上，一个磁盘块的大小为4k，所以一次至少读取一个磁盘块大小的IO效率是最高的
+ * */
+#define BUFSIZE 4096
 /* size_t read(int fildes, void *buf, size_t nbyte);
  * 从文件中读取数据
  * Arguments:
@@ -25,17 +27,17 @@
  * buf:写入数据存放的缓冲区
  * nbyte:写入的最长数据长度
  * Return Value:
- * 返回实际写入的数据长度
+ * 返回实际写入的数据长度，如果数据长度小于nbyte则在后补0；如果文件剩余容量小于nbyte则返回能写入的最大数据长度
  * */
 /* read和write参数和返回值都类似，但是对于不同的文件描述符例如pipe，socket等都有不同的返回方法或者异常处理方法
  * */
-int main()
+void Test1()
 {
   int fd = open("test.txt", O_CREAT | O_RDWR | O_TRUNC, 0664);
   if(fd < 0)
   {
     perror("error:");
-    return -1;
+    return;
   }
   int ret = write(fd, "Misaki", 7);
   std::cout << ret << std::endl;
@@ -44,4 +46,31 @@ int main()
   ret = read(fd, buf, 1024);
   std::cout << ret << std::endl;
   std::cout << buf << std::endl;
+}
+bool Test2()
+{
+  int n = 0;
+  char buf[BUFSIZE];
+  while((n = read(STDIN_FILENO, buf, 4096)) > 0)
+  {
+    if(write(STDOUT_FILENO, buf, n) != n)
+    {
+      perror("write error:");
+      return false;
+    }
+  }
+  if(n < 0)
+  {
+    perror("read error:");
+    return false;
+  }
+  return true;
+}
+int main()
+{
+  if(Test2() == false)
+  {
+    std::cerr << "copy error" << std::endl;
+    return -1;
+  }
 }
