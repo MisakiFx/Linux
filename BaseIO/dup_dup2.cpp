@@ -14,7 +14,7 @@
  * oldfd:旧文件描述符
  * newfd:新文件描述符
  * Return Value:成功返回新文件描述符，失败返回-1
- * dup和dup2都是原子性的
+ * dup和dup2都是原子性的，，其相当于调用了close函数和fcntl函数
  * */
 
 int main()
