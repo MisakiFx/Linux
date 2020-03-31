@@ -33,7 +33,7 @@ int main()
   //测试文件是否截断
   //如果使用一个系统调用如open创建一个新文件的文件名大于NAME_MAX，有的系统会选择截断，而有的系统选择返回-1报错
   //如果_POSIX_NO_TRUNC值为真则返回-1报错，为假则对文件名进行截断，并且成功创建
-  std::cout << pathconf(".", _PC_NO_TRUNC) << std::endl;;
+  std::cout << pathconf(".", _PC_NO_TRUNC) << std::endl;
   //Linux操作系统下的处理为报错返回，并将errno置为ENAMETOOLONG
 }
 

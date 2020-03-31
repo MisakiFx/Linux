@@ -27,7 +27,7 @@
  * buf:写入数据存放的缓冲区
  * nbyte:写入的最长数据长度
  * Return Value:
- * 返回实际写入的数据长度，如果数据长度小于nbyte则在后补0；如果文件剩余容量小于nbyte则返回能写入的最大数据长度
+ * 返回实际写入的数据长度，如果数据长度小于nbyte则在后补\0；如果文件剩余容量小于nbyte则返回能写入的最大数据长度
  * */
 /* read和write参数和返回值都类似，但是对于不同的文件描述符例如pipe，socket等都有不同的返回方法或者异常处理方法
  * */
@@ -39,6 +39,7 @@ void Test1()
     perror("error:");
     return;
   }
+  //末尾补\0
   int ret = write(fd, "Misaki", 7);
   std::cout << ret << std::endl;
   lseek(fd, 0, SEEK_SET);
@@ -46,6 +47,11 @@ void Test1()
   ret = read(fd, buf, 1024);
   std::cout << ret << std::endl;
   std::cout << buf << std::endl;
+  //可以发现末尾确实补了\0
+  for(int i = 0; i < ret; i++)
+  {
+    std::cout << (int)buf[i] << " ";
+  }
 }
 bool Test2()
 {
@@ -68,9 +74,10 @@ bool Test2()
 }
 int main()
 {
-  if(Test2() == false)
-  {
-    std::cerr << "copy error" << std::endl;
-    return -1;
-  }
+  Test1();
+  //if(Test2() == false)
+  //{
+  //  std::cerr << "copy error" << std::endl;
+  //  return -1;
+  //}
 }
