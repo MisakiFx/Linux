@@ -29,7 +29,7 @@ int main()
   char buf[4096];
   lseek(fd, 1, SEEK_SET);
   //从这里可以看出pread是将偏移量置为offset，而不是加上offset
-  int ret = pread(fd, buf, 4096, 1);
+  int ret = pread(fd, buf, 4096, 0);
   std::cout << ret << std::endl;
   buf[ret] = '\0';
   std::cout << buf;
